@@ -33,6 +33,8 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+// evidently /urls/:id is syntactically indifferent from /urls/new,
+// so if you want the latter to function, it has to appear BEFORE the former within the code
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
@@ -43,10 +45,12 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
-// first instance of something other than get - this section will bring functionality to the form submissions
+// first instance of something other than .GET - this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {
-  console.log(req.body);   // this is a debug statement to illustrate the POST paramaters
-  res.send("Ok");   // this just replies withi OK which will be customized later
+  let shortURL = generateRandomString();
+  let longURL = req.body.longURL;
+  urlDatabase[shortURL] = longURL;
+  res.send("Ok");   // this just replies with OK which will be customized later
 });
 
 // initialize the server and provide a console log to that effect
@@ -56,11 +60,14 @@ app.listen(PORT, () => {
 
 
 function generateRandomString() {
-  let randomString = "";
-  let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  var randomString = "";
+  var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-  for (let i = 0; i < 6; i++) {
-    randomString += chars.charAt(Math.floor(Math.random() * chars.length));
-  };
+  do {
+    for (var i = 0; i < 6; i++) {
+      randomString += chars.charAt(Math.floor(Math.random() * chars.length));
+    };
+  } while (urlDatabase[randomString])
   return randomString;
 }
+

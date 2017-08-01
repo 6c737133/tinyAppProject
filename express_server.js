@@ -1,16 +1,21 @@
+// include the various package dependencies required
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 
+// define the template rendering engine and any further express extensions
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
+// define the URL database which would eventually be replaced by actual DB
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.ca"
 };
 
+// define the various routes required
+// should later refactor this code & place in it's own module
 app.get("/", (req, res) => {
   res.end("Hello!\n");
 });
@@ -36,12 +41,15 @@ app.get("/urls/:id", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
-})
+});
 
+// first instance of something other than get - this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {
   console.log(req.body);   // this is a debug statement to illustrate the POST paramaters
   res.send("Ok");   // this just replies withi OK which will be customized later
-})
+});
+
+// initialize the server and provide a console log to that effect
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });

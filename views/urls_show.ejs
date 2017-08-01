@@ -2,18 +2,18 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
-<body>
-    <div class="container">
-  <%- include('partials/_header') %>
-  </div>
+  <head>
+    <title>TinyApp</title>
+  </head>
+  <body>
+      <div class="container">
+      <!-- make a call to the header file in the partials folder -->
+      <%- include('partials/_header') %>
+      </div>
 
-  <h1>Website</h1>
-  <h2><%= shortURL %></h2>
-  <h2><%= longURL %></h2>
+    <h1>Website</h1>
+    <h2><%= shortURL %></h2>
+    <h2><%= longURL %></h2>
 
-
-</body>
+  </body>
 </html>

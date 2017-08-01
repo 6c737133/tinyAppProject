@@ -1,6 +1,6 @@
 # tinyAppProject
 
-This will be my foray into creating a full-fledged web application.
+This will be my foray into creating full-fledged web applications.
 
 The intent of this project will be to create an application which can parse a lengthy URL into a much shorter URL.  This is of interest to Twitter users, as a shorter URL means they can include a greater amount of relevant text in their tweets.
 

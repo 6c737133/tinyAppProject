@@ -50,7 +50,8 @@ app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
   urlDatabase[shortURL] = longURL;
-  res.send("Ok");   // this just replies with OK which will be customized later
+  res.redirect(`http://localhost:8080/urls/${shortURL}`)
+  //res.send("Ok");   // this just replies with OK which will be customized later
 });
 
 // initialize the server and provide a console log to that effect

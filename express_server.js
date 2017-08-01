@@ -45,6 +45,11 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  let longURL = urlDatabase[shortURL];
+  res.redirect(longURL);
+});
+
 // first instance of something other than .GET - this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();

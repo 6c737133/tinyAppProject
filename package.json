@@ -1,0 +1,23 @@
+{
+  "name": "tinyappproject",
+  "version": "1.0.0",
+  "description": "",
+  "main": "express_server.js",
+  "dependencies": {
+    "express": "^4.15.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lsq3/tinyAppProject.git"
+  },
+  "author": "Sean Quilty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lsq3/tinyAppProject/issues"
+  },
+  "homepage": "https://github.com/lsq3/tinyAppProject#readme"
+}

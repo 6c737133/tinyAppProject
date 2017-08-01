@@ -55,4 +55,13 @@ app.listen(PORT, () => {
 });
 
 
+function generateRandomString() {
+  let randomString = "";
+  let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+  for (let i = 0; i < 6; i++) {
+    randomString += chars.charAt(Math.floor(Math.random() * char.length));
+
+    return randomString;
+  };
+}

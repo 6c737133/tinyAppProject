@@ -9,7 +9,7 @@ app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 
 // define the URL database which would eventually be replaced by actual DB
-urlDatabase = {
+var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.ca"
 };
@@ -58,6 +58,14 @@ app.post("/urls", (req, res) => {
   res.redirect(`http://localhost:8080/urls/${shortURL}`)
   //res.send("Ok");   // this just replies with OK which will be customized later
 });
+
+// insert functionality to delete a key/value pair
+app.post("/urls/:id/delete", (req, res) => {
+  let currentDB = urlDatabase;
+  let entryToDelete = req.params.id;
+  delete currentDB[req.params.id];
+  res.redirect("/urls");
+})
 
 // initialize the server and provide a console log to that effect
 app.listen(PORT, () => {

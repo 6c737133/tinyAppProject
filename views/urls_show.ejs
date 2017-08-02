@@ -25,10 +25,21 @@
           <p class="lead">Below are the details of your request!</p>
     </div>
 
-    <h5><i>Your shortened URL is:</i>
-      <b>localhost:8080/u/<%= shortURL %><b></h5>
-    <h5><i>The shortened URL redirects to:</i>
-       <b><%= longURL %></b></h5>
+
+      <div class="container">
+            <h4>The new shortened URL is:
+              <b>localhost:8080/u/<%= shortURL %></b>
+              </h4>
+            <h4>The <i><b>destination</b></i> URL is:
+              <b><%= longURL %></b>
+              </h4>
+          <form action="/urls" method="POST">
+            <label for="longURL">To change the destination, enter a new URL and press Update</label>
+            <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+            <input type="submit" value="Update">
+          </form>
+        <!-- </div> -->
+      </div>
 
   </body>
 </html>

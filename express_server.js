@@ -3,10 +3,12 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 
 // define the template rendering engine and any further express extensions
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 // define the URL database which would eventually be replaced by actual DB
 var urlDatabase = {

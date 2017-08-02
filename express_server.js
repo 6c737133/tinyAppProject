@@ -31,7 +31,10 @@ app.get("/hello", (req ,res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  let templateVars = {
+    urls: urlDatabase,
+    username: req.cookies["username"]
+  };
   res.render("urls_index", templateVars);
 });
 
@@ -42,13 +45,19 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = { shortURL: req.params.id,
-  longURL: urlDatabase[req.params.id] };
+  let templateVars = {
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    username: req.cookies["username"]
+  };
   res.render("urls_show", templateVars);
 });
 
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
+  let templateVars = {
+    username: req.cookies["username"]
+  };
   res.redirect(longURL);
 });
 
@@ -57,6 +66,9 @@ app.get("/u/:shortURL", (req, res) => {
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
+  let templateVars = {
+    username: req.cookies["username"]
+  };
   urlDatabase[shortURL] = longURL;
   res.redirect(`http://localhost:8080/urls/${shortURL}`)
 });
@@ -65,6 +77,9 @@ app.post("/urls", (req, res) => {
 app.post("/urls/:id/delete", (req, res) => {
   let currentDB = urlDatabase;
   let entryToDelete = req.params.id;
+  let templateVars = {
+    username: req.cookies["username"]
+  };
   delete currentDB[req.params.id];
   res.redirect("/urls");
 });
@@ -72,7 +87,10 @@ app.post("/urls/:id/delete", (req, res) => {
 // insert functionality to modify a key/value pair (change desintation URL)
 app.post("/urls/:id/modify", (req, res) => {
   let currentDB = urlDatabase;
-  let newLongURL = req.body.newLongURL
+  let newLongURL = req.body.newLongURL;
+  let templateVars = {
+    username: req.cookies["username"]
+  };
   currentDB[req.params.id] = newLongURL;
   res.redirect("/urls");
 })
@@ -80,6 +98,9 @@ app.post("/urls/:id/modify", (req, res) => {
 // insert login functionality - only using simple cookies for now
 app.post("/login", (req, res) => {
   let newUser = req.body.username;
+  let templateVars = {
+    username: req.cookies["username"]
+  };
   res.cookie("username", newUser);
   res.redirect("/urls");
 })

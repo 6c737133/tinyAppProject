@@ -15,6 +15,9 @@
       .jumbotron {
         margin-top: 10px;
       }
+      ul li {
+        padding: 5px;
+      }
     </style>
   </head>
   <body>
@@ -27,13 +30,11 @@
     <ul>
       <% for (let urlKey in urls) { %>
         <li><%= urlKey %> - <%= urls[urlKey] %>
-        <div style="display:inline-block;>"
         <form method="POST" action="/urls/<%= urlKey %>/delete">
         <input type="submit" value="Delete">
         </form>
       <% } %>
         </li>
-        </div>
     </ul>
     <h2>URL Shortening Link</h2>
     <h3><a href="">Future useful link</a></h3>

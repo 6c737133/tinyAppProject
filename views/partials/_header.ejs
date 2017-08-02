@@ -3,11 +3,19 @@
 <div class="header clearfix">
   <nav>
   <div class="nav nav-pills pull-right">
+    <table>
+    <td id="noBorder">
     <form action="/login" method="POST">
         <label for="username">Username: </label>
         <input id="username" type="text" name="username" style="width: 150px">
         <input type="submit" value="Login">
       </form>
+      </td>
+      <td id="noBorder">
+      <h5><%= username %>
+      </h5>
+      </td>
+      </table>
   </div>
     <h3 class="text-muted">TinyApp URL Shortener</h3>
   </nav>

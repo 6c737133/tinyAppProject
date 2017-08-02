@@ -33,7 +33,7 @@
             <h4>The <i><b>destination</b></i> URL is:
               <b><%= longURL %></b>
               </h4>
-          <form action="/urls" method="POST">
+          <form action="/urls/<%= shortURL %>/modify" method="POST">
             <label for="newLongURL">To change the destination, enter a new URL and press Update</label>
             <input id="newLongURL" type="text" name="newLongURL" placeholder="http://" style="width: 300px">
             <input type="submit" value="Update">

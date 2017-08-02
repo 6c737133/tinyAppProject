@@ -2,27 +2,43 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
-<body>
-  <div class="container">
-        <!-- make a call to the header file in the partials folder -->
-    <%- include('partials/_header') %>
-  </div>
+  <head>
+    <meta charset="utf-8">
+    <title>TinyApp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <style>
+      body {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
 
-  <h1>Websites</h1>
-  <ul>
-    <% for (let urlKey in urls) { %>
-      <li><%= urlKey %> - <%= urls[urlKey] %></li>
-    <% } %>
-  </ul>
-  <h2>URL Shortening Link</h2>
-  <h3><a href="">Future useful link</a></h3>
+      .jumbotron {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+        <%- include('partials/_header') %>
+        <div class="jumbotron">
+          <h1>Welcome to TinyApp</h1>
+          <p class="lead">Below are all of the shortened URLs available!</p>
+    </div>
+    <ul>
+      <% for (let urlKey in urls) { %>
+        <li><%= urlKey %> - <%= urls[urlKey] %>
+        <form method="POST" action="/urls/<%= urlKey %>/delete">
+        <input type="submit" value="Delete">
+        </form>
+      <% } %>
+        </li>
+    </ul>
+    <h2>URL Shortening Link</h2>
+    <h3><a href="">Future useful link</a></h3>
 
-  <form method="POST" action="/urls/9sm5xK/delete">
-  <input type="submit" value="Submit">
-  </form>
+    <form method="POST" action="/urls/9sm5xK/delete">
+    <input type="submit" value="Delete">
+    </form>
 
-</body>
+  </body>
 </html>

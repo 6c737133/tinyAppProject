@@ -56,7 +56,6 @@ app.post("/urls", (req, res) => {
   let longURL = req.body.longURL;
   urlDatabase[shortURL] = longURL;
   res.redirect(`http://localhost:8080/urls/${shortURL}`)
-  //res.send("Ok");   // this just replies with OK which will be customized later
 });
 
 // insert functionality to delete a key/value pair
@@ -64,6 +63,13 @@ app.post("/urls/:id/delete", (req, res) => {
   let currentDB = urlDatabase;
   let entryToDelete = req.params.id;
   delete currentDB[req.params.id];
+  res.redirect("/urls");
+});
+
+app.post("/urls/:id/modify", (req, res) => {
+  let currentDB = urlDatabase;
+  let newLongURL = req.body.newLongURL
+  currentDB[req.params.id] = newLongURL;
   res.redirect("/urls");
 })
 
@@ -81,7 +87,7 @@ function generateRandomString() {
     for (var i = 0; i < 6; i++) {
       randomString += chars.charAt(Math.floor(Math.random() * chars.length));
     };
-  } while (urlDatabase[randomString])
+  } while (urlDatabase[randomString]);
   return randomString;
 }
 

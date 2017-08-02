@@ -41,7 +41,10 @@ app.get("/urls", (req, res) => {
 // evidently /urls/:id is syntactically indifferent from /urls/new,
 // so if you want the latter to function, it has to appear BEFORE the former within the code
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = {
+    username: req.cookies["username"]
+  };
+  res.render("urls_new", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
@@ -55,9 +58,6 @@ app.get("/urls/:id", (req, res) => {
 
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
-  let templateVars = {
-    username: req.cookies["username"]
-  };
   res.redirect(longURL);
 });
 

@@ -52,7 +52,8 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
-// first instance of something other than .GET - this section will bring functionality to the form submissions
+// first instance of something other than .GET
+// this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
@@ -68,10 +69,18 @@ app.post("/urls/:id/delete", (req, res) => {
   res.redirect("/urls");
 });
 
+// insert functionality to modify a key/value pair (change desintation URL)
 app.post("/urls/:id/modify", (req, res) => {
   let currentDB = urlDatabase;
   let newLongURL = req.body.newLongURL
   currentDB[req.params.id] = newLongURL;
+  res.redirect("/urls");
+})
+
+// insert login functionality - only using simple cookies for now
+app.post("/login", (req, res) => {
+  let newUser = req.body.username;
+  res.cookie("username", newUser);
   res.redirect("/urls");
 })
 

@@ -34,14 +34,14 @@
     <div class="container">
       <table>
         <tr>
-          <td>Short URL</td>
+          <td><b>Short URL</b></td>
           <td></td>
-          <td>Destination URL</td>
+          <td><b>Destination URL</b></td>
         </tr>
         <% for (let urlKey in urls) { %>
           <tr>
             <td><%= urlKey %></td>
-            <td>=====></td>
+            <td><b>===></b></td>
             <td><%= urls[urlKey] %></td>
             <td><a href="/urls/<%= urlKey %>">Modify</a>
             <td>
@@ -57,6 +57,4 @@
       <h3><a href="/urls/new">Create a new shortened URL</a></h3>
     </div>
   </body>
-
-
 </html>

@@ -15,11 +15,13 @@
       .jumbotron {
         margin-top: 10px;
       }
-      ul li {
-        padding: 5px;
+      td {
+        padding: 10px;
+        border: 1px solid black;
       }
     </style>
   </head>
+
   <body>
     <div class="container">
         <%- include('partials/_header') %>
@@ -27,17 +29,34 @@
           <h1>Welcome to TinyApp</h1>
           <p class="lead">Below are all of the shortened URLs available!</p>
     </div>
-    <ul>
-      <% for (let urlKey in urls) { %>
-        <li><%= urlKey %> - <%= urls[urlKey] %>
-        <form method="POST" action="/urls/<%= urlKey %>/delete">
-        <input type="submit" value="Delete">
-        </form>
-      <% } %>
-        </li>
-    </ul>
-    <h2>URL Shortening Link</h2>
-    <h3><a href="">Future useful link</a></h3>
 
+
+    <div class="container">
+      <table>
+        <tr>
+          <td>Short URL</td>
+          <td></td>
+          <td>Destination URL</td>
+        </tr>
+        <% for (let urlKey in urls) { %>
+          <tr>
+            <td><%= urlKey %></td>
+            <td>=====></td>
+            <td><%= urls[urlKey] %></td>
+            <td><a href="/urls/<%= urlKey %>">Modify</a>
+            <td>
+            <form method="POST" action="/urls/<%= urlKey %>/delete">
+            <input type="submit" value="Delete">
+            </form>
+            </td>
+          </tr>
+        <% } %>
+      </table>
+    </div>
+    <div class="container">
+      <h3><a href="/urls/new">Create a new shortened URL</a></h3>
+    </div>
   </body>
+
+
 </html>

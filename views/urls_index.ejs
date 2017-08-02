@@ -15,9 +15,17 @@
       .jumbotron {
         margin-top: 10px;
       }
+      form {
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
       td {
+        align-content: center;
         padding: 10px;
-        border: 1px solid black;
+        border: 2px solid black;
+      }
+      td#noBorder {
+        border: 0px;
       }
     </style>
   </head>
@@ -35,8 +43,9 @@
       <table>
         <tr>
           <td><b>Short URL</b></td>
-          <td></td>
-          <td><b>Destination URL</b></td>
+          <td><b>Leads to</b></td>
+          <td align="center"><b>Destination URL</b></td>
+          <td colspan="2" align="center"><b>Actions</b></td>
         </tr>
         <% for (let urlKey in urls) { %>
           <tr>

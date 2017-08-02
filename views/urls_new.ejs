@@ -1,16 +1,44 @@
 <!-- views/urls_new.ejs -->
 
+
+
 <!DOCTYPE html>
-<html lang="en">
-  <head></head>
-  <body style="font-size:20px; padding:50px;">
-    <!-- make a call to the header file in the partials folder -->
-    <% include partials/_header %>
-    <!-- create the structure and define the actions for the form -->
-    <form action="/urls" method="POST" style="margin:150px;">
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>TinyApp</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <style>
+    body {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .jumbotron {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <%- include('partials/_header') %>
+    <div class="jumbotron">
+      <h1>Welcome to TinyApp</h1>
+      <p class="lead">Fill out the below details and shorten a URL!</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <form action="/urls" method="POST" style="margin:150px;">
       <label for="longURL">Enter a URL:</label>
       <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
       <input type="submit" value="Submit">
     </form>
-  </body>
+    </div>
+  </div>
+</body>
+
 </html>

@@ -62,7 +62,9 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 // create new end point to support registration
-
+app.get("/register", (req, res) => {
+  res.render("urls_register");
+});
 
 // first instance of something other than .GET
 // this section will bring functionality to the form submissions

@@ -81,8 +81,13 @@ app.get("/register", (req, res) => {
   let templateVars = {
     user: userDatabase
   };
-  res.render("urls_register");
+  res.render("urls_register", templateVars);
 });
+
+// create a login page to transfer responsibility from header to proper page
+app.get("/login", (req, res) => {
+  res.render("urls_login")
+})
 
 // first instance of something other than .GET
 // this section will bring functionality to the form submissions
@@ -138,12 +143,12 @@ app.post("/logout", (req, res) => {
 app.post("/register", (req, res) => {
   if (req.body.email === '' || req.body.password === '') {
     return res.status(400);
-  } else if (
+  } else {
         for (user in userDatabase) {
           if (req.body.email == userDatabase[user].email) {
             return res.status(400);
-          }});
-    else {
+          }
+        }
       let newUserID = generateRandomString();
       userDatabase[newUserID] = {
         id: newUserID,

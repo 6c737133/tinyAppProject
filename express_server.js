@@ -64,6 +64,9 @@ app.get("/u/:shortURL", (req, res) => {
 
 // create new end point to support registration
 app.get("/register", (req, res) => {
+  let templateVars = {
+    username: req.cookies["username"]
+  };
   res.render("urls_register");
 });
 

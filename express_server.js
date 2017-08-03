@@ -61,6 +61,9 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(longURL);
 });
 
+// create new end point to support registration
+
+
 // first instance of something other than .GET
 // this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {

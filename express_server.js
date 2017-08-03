@@ -45,24 +45,24 @@ var userDatabase = {
 
 app.get("/urls", (req, res) => {
   let userUrls = [];
-
   if (req.cookies.user_id === undefined) {
     res.redirect("/login")
   } else {
-              for (key in urlDatabase) {
-                if (req.cookies.user_id === urlDatabase[key].user) {
-                  userUrls.push(urlDatabase[key])
-                  console.log(userUrls)
-                  console.log("ya this belongs to him....")
+      for (key in urlDatabase) {
+        if (req.cookies.user_id === urlDatabase[key].user) {
+          userUrls.push(urlDatabase[key])
+          console.log(userUrls)
+       }
+     }
+  let templateVars = {
+      currUrls: userUrls,
+      userCookie: req.cookies.user_id
+  }
+    res.render("urls_index", templateVars)
+   }
+});
 
-                } else {
-                  console.log("THIS AINT YOURS!")
-                console.log(urlDatabase[key].user)
-                console.dir(urlDatabase)
-                    }
-                  }
-                }
-              })
+
 
 //   let templateVars = {
 //     urls: urlDatabase,

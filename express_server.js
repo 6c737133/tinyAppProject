@@ -9,6 +9,7 @@ const cookieParser = require("cookie-parser");
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
+app.use(express.static('public'));
 
 // define the URL database which would eventually be replaced by actual DB
 var urlDatabase = {

@@ -1,0 +1,36 @@
+<!-- views/urls_register.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>TinyApp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <div class="container">
+        <%- include('partials/_header') %>
+        <div class="jumbotron">
+          <h1>Welcome to TinyApp</h1>
+          <p class="lead">Below are the details of your request!</p>
+    </div>
+
+
+      <div class="container">
+            <h4>The new shortened URL is:
+              <b>localhost:8080/u/<%= shortURL %></b>
+              </h4>
+            <h4>The <i><b>destination</b></i> URL is:
+              <b><%= longURL %></b>
+              </h4>
+          <form action="/urls/<%= shortURL %>/modify" method="POST">
+            <label for="newLongURL">To change the destination, enter a new URL and press Update</label>
+            <input id="newLongURL" type="text" name="newLongURL" placeholder="http://" style="width: 300px">
+            <input type="submit" value="Update">
+          </form>
+      </div>
+
+  </body>
+</html>

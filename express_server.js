@@ -22,6 +22,11 @@ var urlDatabase = {
     user: "fakeUser2",
     shortURL: "9sm5xK",
     longURL: "http://www.google.ca"
+  },
+  "fud27s" : {
+    user: "fakeUser1",
+    shortURL: "fud27s",
+    longURL: "http://www.google.ca"
   }
 };
 
@@ -62,15 +67,6 @@ app.get("/urls", (req, res) => {
    }
 });
 
-
-
-//   let templateVars = {
-//     urls: urlDatabase,
-//     userCookie: req.cookies.user_id
-//   };
-//   res.render("urls_index", templateVars);
-//   }
-// });
 
 // evidently /urls/:id is syntactically indifferent from /urls/new,
 // so if you want the latter to function, it has to appear BEFORE the former within the code

@@ -13,12 +13,12 @@ app.use(express.static('public'));
 
 // define the URL database which would eventually be replaced by actual DB
 var urlDatabase = {
-    "fakeUser1" : {
+    "b2xVn2" : {
     user: "fakeUser1",
     shortURL: "b2xVn2",
     longURL: "http://www.lighthouselabs.ca"
   },
-  "fakeUser2" :   {
+  "9sm5xK" :   {
     user: "fakeUser2",
     shortURL: "9sm5xK",
     longURL: "http://www.google.ca"
@@ -144,11 +144,18 @@ app.post("/urls/:id/delete", (req, res) => {
 // insert functionality to modify a key/value pair (change desintation URL)
 app.post("/urls/:id/modify", (req, res) => {
   let currentDB = urlDatabase;
+  let userID = req.cookies.user_id;
   let newLongURL = req.body.newLongURL;
+
+  currentDB[userID].longURL = newLongURL;
+
+  console.log(currentDB)
+  console.log(userID)
+  console.log(newLongURL)
+
   let templateVars = {
     user: userDatabase
   };
-  currentDB[user].shortURL[req.params.id] = newLongURL;
   res.redirect("/urls");
 });
 

@@ -42,19 +42,24 @@ var userDatabase = {
 
 // define the various routes required
 // should later refactor this code & place in it's own module
-app.get("/", (req, res) => {
-  res.redirect("/login");
-});
 
 app.get("/urls", (req, res) => {
+  let userUrls = [];
+
   if (req.cookies.user_id === undefined) {
     res.redirect("/login")
   } else {
-              for (entry in urlDatabase) {
-                if (req.cookies.user_id === urlDatabase[entry][user]) {
+              for (key in urlDatabase) {
+                if (req.cookies.user_id === urlDatabase[key].user) {
+                  userUrls.push(urlDatabase[key])
+                  console.log(userUrls)
                   console.log("ya this belongs to him....")
-                } else {console.log("THIS AINT YOURS!")
-                console.log(urlDatabase[entry][user])}
+
+                } else {
+                  console.log("THIS AINT YOURS!")
+                console.log(urlDatabase[key].user)
+                console.dir(urlDatabase)
+                    }
                   }
                 }
               })
@@ -124,15 +129,13 @@ app.get("/login", (req, res) => {
 })
 
 // test wildcard route
-app.get("/:anything", (req, res) => {
-  res.redirect("/login");
-})
+// app.get("/:anything", (req, res) => {
+//   res.redirect("/login");
+// })
 
 // first instance of something other than .GET
 // this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {
-
-
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
   let templateVars = {
@@ -212,6 +215,9 @@ app.post("/register", (req, res) => {
     };
   });
 
+app.use("/", (req, res) => {
+  res.redirect("/login");
+});
 
 // initialize the server and provide a console log to that effect
 app.listen(PORT, () => {

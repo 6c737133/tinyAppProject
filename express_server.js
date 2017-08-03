@@ -56,11 +56,15 @@ app.get("/urls", (req, res) => {
 // evidently /urls/:id is syntactically indifferent from /urls/new,
 // so if you want the latter to function, it has to appear BEFORE the former within the code
 app.get("/urls/new", (req, res) => {
-  let templateVars = {
-    user: userDatabase,
-    userCookie: req.cookies.user_id
-  };
-  res.render("urls_new", templateVars);
+  if (req.cookies.user_id === undefined) {
+    res.redirect("/login")
+  } else {
+    let templateVars = {
+      user: userDatabase,
+      userCookie: req.cookies.user_id
+    };
+    res.render("urls_new", templateVars);
+  }
 });
 
 app.get("/urls/:id", (req, res) => {

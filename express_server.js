@@ -12,13 +12,13 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 // define the URL database which would eventually be replaced by actual DB
-const urlDatabase = {
+var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.ca"
 };
 
 // create a user object to facilitate registration/logic
-const users = {
+var userDatabase = {
   "fakeUser1" : {
     id: "fakeUser1",
     email: "fakeUser1@email.com",
@@ -126,11 +126,22 @@ app.post("/login", (req, res) => {
   };
   res.cookie("username", newUser);
   res.redirect("/urls");
-})
+});
 
 // insert logout functionality - need to clear the cookie and redirect
 app.post("/logout", (req, res) => {
   res.clearCookie("username");
+  res.redirect("/urls");
+});
+
+app.post("/register", (req, res) => {
+  let newUserID = generateRandomString();
+  userDatabase[newUserID] = {
+      id: newUserID,
+      email: req.body.email,
+      password: req.body.password
+    };
+  res.cookie("user_id", newUserID);
   res.redirect("/urls");
 });
 

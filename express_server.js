@@ -48,7 +48,7 @@ app.get("/hello", (req ,res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlDatabase,
-    username: req.cookies["username"]
+    user: userDatabase
   };
   res.render("urls_index", templateVars);
 });
@@ -57,7 +57,7 @@ app.get("/urls", (req, res) => {
 // so if you want the latter to function, it has to appear BEFORE the former within the code
 app.get("/urls/new", (req, res) => {
   let templateVars = {
-    username: req.cookies["username"]
+    user: userDatabase
   };
   res.render("urls_new", templateVars);
 });
@@ -66,7 +66,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
-    username: req.cookies["username"]
+    user: userDatabase
   };
   res.render("urls_show", templateVars);
 });
@@ -79,7 +79,7 @@ app.get("/u/:shortURL", (req, res) => {
 // create new end point to support registration
 app.get("/register", (req, res) => {
   let templateVars = {
-    username: req.cookies["username"]
+    user: userDatabase
   };
   res.render("urls_register");
 });
@@ -90,7 +90,7 @@ app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
   let templateVars = {
-    username: req.cookies["username"]
+    user: userDatabase
   };
   urlDatabase[shortURL] = longURL;
   res.redirect(`http://localhost:8080/urls/${shortURL}`)
@@ -101,7 +101,7 @@ app.post("/urls/:id/delete", (req, res) => {
   let currentDB = urlDatabase;
   let entryToDelete = req.params.id;
   let templateVars = {
-    username: req.cookies["username"]
+    user: userDatabase
   };
   delete currentDB[req.params.id];
   res.redirect("/urls");
@@ -112,7 +112,7 @@ app.post("/urls/:id/modify", (req, res) => {
   let currentDB = urlDatabase;
   let newLongURL = req.body.newLongURL;
   let templateVars = {
-    username: req.cookies["username"]
+    user: userDatabase
   };
   currentDB[req.params.id] = newLongURL;
   res.redirect("/urls");
@@ -122,7 +122,7 @@ app.post("/urls/:id/modify", (req, res) => {
 app.post("/login", (req, res) => {
   let newUser = req.body.username;
   let templateVars = {
-    username: req.cookies["username"]
+    user: userDatabase
   };
   res.cookie("username", newUser);
   res.redirect("/urls");
@@ -134,16 +134,27 @@ app.post("/logout", (req, res) => {
   res.redirect("/urls");
 });
 
+// insert registration functionality and error handling
 app.post("/register", (req, res) => {
-  let newUserID = generateRandomString();
-  userDatabase[newUserID] = {
-      id: newUserID,
-      email: req.body.email,
-      password: req.body.password
+  if (req.body.email === '' || req.body.password === '') {
+    return res.status(400);
+  } else if (
+        for (user in userDatabase) {
+          if (req.body.email == userDatabase[user].email) {
+            return res.status(400);
+          }});
+    else {
+      let newUserID = generateRandomString();
+      userDatabase[newUserID] = {
+        id: newUserID,
+        email: req.body.email,
+        password: req.body.password
+      };
+      res.cookie("user_id", newUserID);
+      res.redirect("/urls");
     };
-  res.cookie("user_id", newUserID);
-  res.redirect("/urls");
-});
+  });
+
 
 // initialize the server and provide a console log to that effect
 app.listen(PORT, () => {

@@ -10,7 +10,7 @@
   </head>
   <body>
     <div class="container">
-        <%- include('partials/_header') %>
+
         <div class="jumbotron">
           <h1>Welcome to TinyApp</h1>
           <p class="lead">Please fill out the below details to create your account!</p>
@@ -18,17 +18,25 @@
 
 
       <div class="container">
-            <h4>The new shortened URL is:
-              <b></b>
-              </h4>
-            <h4>The <i><b>destination</b></i> URL is:
-              <b></b>
-              </h4>
-          <form action="/" method="POST">
-            <label for="newLongURL">To change the destination, enter a new URL and press Update</label>
-            <input id="" type="text" name="" placeholder="http://" style="width: 300px">
-            <input type="submit" value="Update">
-          </form>
+
+<table>
+<tr>
+<td id="noBorder">
+            <form action="/register" method="POST">
+            <label for="email">Enter your email address:</label>
+            <input id="email" type="email" name="email" placeholder="email@domain.com" style="width: 150px">
+            <!-- <input type="submit" value="Update"> -->
+            </form>
+</td>
+            <td id="noBorder">
+            <form action="/register" method="POST">
+            <label for="newLongURL">Create a password: </label>
+            <input id="password" type="password" name="password" style="width: 150">
+            <input type="submit" value="Submit">
+            </form>
+</td>
+</tr>
+</table>
       </div>
 
   </body>

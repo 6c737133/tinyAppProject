@@ -127,10 +127,10 @@ app.post("/urls/:id/modify", (req, res) => {
 app.post("/login", (req, res) => {
   for (user in userDatabase) {
     if (req.body.email !== userDatabase[user].email) {
-      return res.status(403);
+      return res.status(403).send('Invalid email or password');
     } else {
       if (req.body.password !== userDatabase[user].password) {
-        return res.status(403);
+        return res.status(403).send('Invalid email or password');
       } else {
         res.cookie("user_id", userDatabase[user].id);
         res.redirect("/");

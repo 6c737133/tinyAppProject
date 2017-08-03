@@ -12,9 +12,23 @@ app.use(cookieParser());
 app.use(express.static('public'));
 
 // define the URL database which would eventually be replaced by actual DB
-var urlDatabase = {
+const urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.ca"
+};
+
+// create a user object to facilitate registration/logic
+const users = {
+  "fakeUser1" : {
+    id: "fakeUser1",
+    email: "fakeUser1@email.com",
+    password: "testpass1"
+  },
+  "fakeUser2" : {
+    id: "fakeUser2",
+    email: "fakeUser2@email.com",
+    password: "testpass2"
+  }
 };
 
 // define the various routes required

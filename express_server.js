@@ -31,32 +31,41 @@ var userDatabase = {
   "fakeUser1" : {
     id: "fakeUser1",
     email: "fakeUser1@email.com",
-    password: "testpass1"
+    password: "1"
   },
   "fakeUser2" : {
     id: "fakeUser2",
     email: "fakeUser2@email.com",
-    password: "testpass2"
+    password: "2"
   }
 };
 
 // define the various routes required
 // should later refactor this code & place in it's own module
 app.get("/", (req, res) => {
-  res.end("Hello!\n");
+  res.redirect("/login");
 });
 
 app.get("/urls", (req, res) => {
   if (req.cookies.user_id === undefined) {
     res.redirect("/login")
   } else {
-  let templateVars = {
-    urls: urlDatabase,
-    userCookie: req.cookies.user_id
-  };
-  res.render("urls_index", templateVars);
-}
-});
+              for (entry in urlDatabase) {
+                if (req.cookies.user_id === urlDatabase[entry][user]) {
+                  console.log("ya this belongs to him....")
+                } else {console.log("THIS AINT YOURS!")
+                console.log(urlDatabase[entry][user])}
+                  }
+                }
+              })
+
+//   let templateVars = {
+//     urls: urlDatabase,
+//     userCookie: req.cookies.user_id
+//   };
+//   res.render("urls_index", templateVars);
+//   }
+// });
 
 // evidently /urls/:id is syntactically indifferent from /urls/new,
 // so if you want the latter to function, it has to appear BEFORE the former within the code
@@ -114,6 +123,11 @@ app.get("/login", (req, res) => {
   res.render("urls_login", templateVars)
 })
 
+// test wildcard route
+app.get("/:anything", (req, res) => {
+  res.redirect("/login");
+})
+
 // first instance of something other than .GET
 // this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {
@@ -148,10 +162,6 @@ app.post("/urls/:id/modify", (req, res) => {
   let newLongURL = req.body.newLongURL;
 
   currentDB[userID].longURL = newLongURL;
-
-  console.log(currentDB)
-  console.log(userID)
-  console.log(newLongURL)
 
   let templateVars = {
     user: userDatabase

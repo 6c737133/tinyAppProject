@@ -132,22 +132,12 @@ app.post("/login", (req, res) => {
       if (req.body.password !== userDatabase[user].password) {
         return res.status(403);
       } else {
-        res.cookie("user_id", userDatabase[user]);
+        res.cookie("user_id", userDatabase[user].id);
         res.redirect("/");
         }
       }
     };
   });
-
-
-
-//   let newUser = req.body.email;
-//   let templateVars = {
-//     user: userDatabase
-//   };
-//   res.cookie("username", newUser);
-//   res.redirect("/urls");
-// });
 
 // insert logout functionality - need to clear the cookie and redirect
 app.post("/logout", (req, res) => {

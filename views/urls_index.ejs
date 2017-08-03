@@ -26,14 +26,14 @@
           <td align="center"><b>Destination URL</b></td>
           <td colspan="2" align="center"><b>Actions</b></td>
         </tr>
-        <% for (let urlKey in urls) { %>
+        <% for (let urlObj in urls) { %>
           <tr>
-            <td><%= urlKey %></td>
+            <td><%= urls[urlObj].shortURL %></td>
             <td><b>===></b></td>
-            <td><%= urls[urlKey] %></td>
-            <td><a href="/urls/<%= urlKey %>">Modify</a>
+            <td><%= urls[urlObj].longURL %></td>
+            <td><a href="/urls/<%= urls[urlObj].shortURL %>">Modify</a>
             <td>
-            <form method="POST" action="/urls/<%= urlKey %>/delete">
+            <form method="POST" action="/urls/<%= urls[urlObj].shortURL %>/delete">
             <input type="submit" value="Delete">
             </form>
             </td>

@@ -13,9 +13,18 @@ app.use(express.static('public'));
 
 // define the URL database which would eventually be replaced by actual DB
 var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.ca"
+    "fakeUser1" : {
+    user: "fakeUser1",
+    shortURL: "b2xVn2",
+    longURL: "http://www.lighthouselabs.ca"
+  },
+  "fakeUser2" :   {
+    user: "fakeUser2",
+    shortURL: "9sm5xK",
+    longURL: "http://www.google.ca"
+  }
 };
+
 
 // create a user object to facilitate registration/logic
 var userDatabase = {
@@ -37,20 +46,16 @@ app.get("/", (req, res) => {
   res.end("Hello!\n");
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
-app.get("/hello", (req ,res) => {
-  res.end("<html><body>Hello <b>World</b></body></html>\n");
-});
-
 app.get("/urls", (req, res) => {
+  if (req.cookies.user_id === undefined) {
+    res.redirect("/login")
+  } else {
   let templateVars = {
     urls: urlDatabase,
     userCookie: req.cookies.user_id
   };
   res.render("urls_index", templateVars);
+}
 });
 
 // evidently /urls/:id is syntactically indifferent from /urls/new,
@@ -68,13 +73,22 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-  let templateVars = {
+    let templateVars = {
+    urls: urlDatabase,
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
     user: userDatabase,
     userCookie: req.cookies.user_id
   };
-  res.render("urls_show", templateVars);
+    if (req.cookies.user_id === undefined) {
+    res.redirect("/login")
+  } else {
+    for (urlObj in urlDatabase) {
+      if (req.cookies.user_id === urlObj) {
+        res.render("urls_show", templateVars)
+      }
+    }
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -103,6 +117,8 @@ app.get("/login", (req, res) => {
 // first instance of something other than .GET
 // this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {
+
+
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
   let templateVars = {
@@ -132,7 +148,7 @@ app.post("/urls/:id/modify", (req, res) => {
   let templateVars = {
     user: userDatabase
   };
-  currentDB[req.params.id] = newLongURL;
+  currentDB[user].shortURL[req.params.id] = newLongURL;
   res.redirect("/urls");
 });
 

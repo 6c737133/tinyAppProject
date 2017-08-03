@@ -18,11 +18,11 @@
 
 
       <div class="container">
-            <h4>The new shortened URL is:
-              <b>localhost:8080/u/<%= shortURL %></b>
+            <h4>The shortened URL is:
+              <b>localhost:8080/u/<%= urls[urlObj].shortURL %></b>
               </h4>
             <h4>The <i><b>destination</b></i> URL is:
-              <b><%= longURL %></b>
+              <b><%= urls[urlObj].longURL %></b>
               </h4>
           <form action="/urls/<%= shortURL %>/modify" method="POST">
             <label for="newLongURL">To change the destination, enter a new URL and press Update</label>

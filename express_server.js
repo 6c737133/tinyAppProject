@@ -48,7 +48,7 @@ app.get("/hello", (req ,res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlDatabase,
-    user: userDatabase
+    userCookie: req.cookies.user_id
   };
   res.render("urls_index", templateVars);
 });
@@ -57,7 +57,8 @@ app.get("/urls", (req, res) => {
 // so if you want the latter to function, it has to appear BEFORE the former within the code
 app.get("/urls/new", (req, res) => {
   let templateVars = {
-    user: userDatabase
+    user: userDatabase,
+    userCookie: req.cookies.user_id
   };
   res.render("urls_new", templateVars);
 });
@@ -66,7 +67,8 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
     longURL: urlDatabase[req.params.id],
-    user: userDatabase
+    user: userDatabase,
+    userCookie: req.cookies.user_id
   };
   res.render("urls_show", templateVars);
 });
@@ -79,14 +81,19 @@ app.get("/u/:shortURL", (req, res) => {
 // create new end point to support registration
 app.get("/register", (req, res) => {
   let templateVars = {
-    user: userDatabase
+    user: userDatabase,
+    userCookie: req.cookies.user_id
   };
   res.render("urls_register", templateVars);
 });
 
 // create a login page to transfer responsibility from header to proper page
 app.get("/login", (req, res) => {
-  res.render("urls_login")
+  let templateVars = {
+    user: userDatabase,
+    userCookie: req.cookies.user_id
+  };
+  res.render("urls_login", templateVars)
 })
 
 // first instance of something other than .GET
@@ -105,6 +112,8 @@ app.post("/urls", (req, res) => {
 app.post("/urls/:id/delete", (req, res) => {
   let currentDB = urlDatabase;
   let entryToDelete = req.params.id;
+  let userId = req.cookies.user_id;
+  let user = userDatabase[userId];
   let templateVars = {
     user: userDatabase
   };
@@ -133,7 +142,7 @@ app.post("/login", (req, res) => {
         return res.status(403).send('Invalid email or password');
       } else {
         res.cookie("user_id", userDatabase[user].id);
-        res.redirect("/");
+        res.redirect("/urls");
         }
       }
     };

@@ -17,4 +17,6 @@ td {
       }
 td#noBorder {
         border: 0px;
+        align-content: center;
+        padding: 10px
       }

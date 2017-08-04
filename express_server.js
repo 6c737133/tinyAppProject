@@ -47,17 +47,17 @@ var userDatabase = {};
 
 app.get("/urls", (req, res) => {
   let userUrls = [];
-  if (req.cookies.user_id === undefined) {
+  if (req.session.user_id === undefined) {
     return res.redirect("/login")
   } else {
       for (key in urlDatabase) {
-        if (req.cookies.user_id === urlDatabase[key].user) {
+        if (req.session.user_id === urlDatabase[key].user) {
           userUrls.push(urlDatabase[key])
        }
      }
   let templateVars = {
       currUrls: userUrls,
-      userCookie: req.cookies.user_id
+      userCookie: req.session.user_id
   }
     return res.render("urls_index", templateVars)
    }
@@ -67,18 +67,18 @@ app.get("/urls", (req, res) => {
 // evidently /urls/:id is syntactically indifferent from /urls/new,
 // so if you want the latter to function, it has to appear BEFORE the former within the code
 app.get("/urls/new", (req, res) => {
-  if (!req.cookies.user_id) return res.redirect("/login")
+  if (!req.session.user_id) return res.redirect("/login")
 
   let templateVars = {
     user: userDatabase,
-    userCookie: req.cookies.user_id
+    userCookie: req.session.user_id
   };
   return res.render("urls_new", templateVars);
 });
 
 // route for a specific short URL's info
 app.get("/urls/:id", (req, res) => {
-  if (req.cookies.user_id === undefined) {
+  if (req.session.user_id === undefined) {
     return res.status(403).send('You are not authorized to access this resource.')
   } else {
         let templateVars = {
@@ -86,7 +86,7 @@ app.get("/urls/:id", (req, res) => {
           shortURL: req.params.id,
           longURL: urlDatabase[req.params.id],
           user: userDatabase,
-          userCookie: req.cookies.user_id
+          userCookie: req.session.user_id
         }
       return res.render("urls_show", templateVars)
     }
@@ -100,23 +100,23 @@ app.get("/u/:shortURL", (req, res) => {
 app.get("/register", (req, res) => {
   let templateVars = {
     user: userDatabase,
-    userCookie: req.cookies.user_id
+    userCookie: req.session.user_id
   };
   return res.render("urls_register", templateVars);
 });
 
 // create a login page to transfer responsibility from header to proper page
 app.get("/login", (req, res) => {
-  if (!req.cookies.user_id) {
+  if (!req.session.user_id) {
     let templateVars = {
       user: userDatabase,
-      userCookie: req.cookies.user_id
+      userCookie: req.session.user_id
     }
     return res.render("urls_login", templateVars)
   } else {
       let userUrls = [];
         for (key in urlDatabase) {
-          if (req.cookies.user_id === urlDatabase[key].user) {
+          if (req.session.user_id === urlDatabase[key].user) {
             userUrls.push(urlDatabase[key])
           }
         }
@@ -124,7 +124,7 @@ app.get("/login", (req, res) => {
     let templateVars = {
       currUrls: userUrls,
       user: userDatabase,
-      userCookie: req.cookies.user_id
+      userCookie: req.session.user_id
     };
     return res.redirect("/urls")
   }
@@ -136,17 +136,17 @@ app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
 
-if (req.cookies.user_id === undefined) {
+if (req.session.user_id === undefined) {
     return res.redirect("/login")
   } else {
   urlDatabase[shortURL] = [shortURL]
-  urlDatabase[shortURL].user = req.cookies.user_id
+  urlDatabase[shortURL].user = req.session.user_id
   urlDatabase[shortURL].shortURL = shortURL
   urlDatabase[shortURL].longURL = longURL
 
   let templateVars = {
     urls: urlDatabase,
-    userCookie: req.cookies.user_id,
+    userCookie: req.session.user_id,
     shortURL: shortURL,
     longURL: longURL
   };
@@ -159,7 +159,7 @@ if (req.cookies.user_id === undefined) {
 app.post("/urls/:id/delete", (req, res) => {
   let currentDB = urlDatabase;
   let entryToDelete = req.params.id;
-  let userId = req.cookies.user_id;
+  let userId = req.session.user_id;
   let user = userDatabase[userId];
   let templateVars = {
     user: userDatabase
@@ -170,7 +170,7 @@ app.post("/urls/:id/delete", (req, res) => {
 
 // insert functionality to modify a key/value pair (change desintation URL)
 app.post("/urls/:id/modify", (req, res) => {
-  if (req.cookies.user_id === undefined) {
+  if (req.session.user_id === undefined) {
     return res.status(403).send('You are not authorized to access this resource.')
   } else {
       urlDatabase[req.params.id].shortURL.longURL = req.body.newLongURL;
@@ -178,7 +178,7 @@ app.post("/urls/:id/modify", (req, res) => {
 
   let userUrls = [];
     for (key in urlDatabase) {
-      if (req.cookies.user_id === urlDatabase[key].user) {
+      if (req.session.user_id === urlDatabase[key].user) {
         userUrls.push(urlDatabase[key])
       }
     }
@@ -186,7 +186,7 @@ app.post("/urls/:id/modify", (req, res) => {
     let templateVars = {
       user: userDatabase,
       currUrls: userUrls,
-      userCookie: req.cookies.user_id
+      userCookie: req.session.user_id
     };
   return res.render("urls_index", templateVars);
 });

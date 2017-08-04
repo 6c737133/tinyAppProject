@@ -36,16 +36,6 @@ var urlDatabase = {
 
 // create a user object to facilitate registration/logic
 var userDatabase = {};
-  // "fakeUser1" : {
-  //   id: "fakeUser1",
-  //   email: "fakeUser1@email.com",
-  //   password: "1"
-  // },
-  // "fakeUser2" : {
-  //   id: "fakeUser2",
-  //   email: "fakeUser2@email.com",
-  //   password: "2"
-  // }
 
 
 // define the various routes required
@@ -199,14 +189,14 @@ app.post("/urls/:id/modify", (req, res) => {
 
 // insert login functionality - modified to accept real credentials
 app.post("/login", (req, res) => {
-  if (!req.body.email || !req.body.password) return res.status(403).send('Invalid email or password');
+  if (!req.body.email || !req.body.password) return res.status(403).send('The email address or password provided are invalid.');
 
   for (user in userDatabase) {
-    if ((req.body.email === userDatabase[user].email) && (req.body.password === userDatabase[user].password)) {
+    if ((req.body.email === userDatabase[user].email) && (bcrypt.compareSync(req.body.password, userDatabase[user].password))) {
       return res.cookie("user_id", userDatabase[user].id).redirect("/urls");
     }
   };
-  return res.status(403).send('Invalid email or password');
+  return res.status(403).send('The email address or password provided are invalid.');
 });
 
 // insert logout functionality - need to clear the cookie and redirect

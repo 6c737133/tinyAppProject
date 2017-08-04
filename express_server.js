@@ -4,6 +4,9 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
+//const password = req.body.password;
+const hashed_password = bcrypt.hashSync("s34nQ", 10);
 
 // define the template rendering engine and any further express extensions
 app.set("view engine", "ejs");
@@ -222,12 +225,14 @@ app.post("/register", (req, res) => {
   }
 
   let newUserID = generateRandomString();
+  let password = bcrypt.hashSync(req.body.password, 10)
 
   userDatabase[newUserID] = {
     id: newUserID,
     email: req.body.email,
-    password: req.body.password
+    password: password
   };
+  console.log(password)
   return res.cookie("user_id", newUserID).redirect("/urls");
 });
 

@@ -9,27 +9,22 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css">
   </head>
   <body>
-        <%- include('partials/_header') %>
+<%- include('partials/_header') %>
     <div class="container">
-        <div class="jumbotron">
-          <h1>Welcome to TinyApp</h1>
-          <p class="lead">Below are the details of your request!</p>
-    </div>
-
-
-      <div class="container">
-            <h4>The shortened URL is:
-              <b>localhost:8080/u/<%= urls[shortURL].shortURL %></b>
-              </h4>
-            <h4>The <i><b>destination</b></i> URL is:
-              <b><%= urls[shortURL].longURL %></b>
-              </h4>
-          <form action="/urls/<%= urls[shortURL].shortURL %>/modify" method="POST">
-            <label for="newLongURL">To change the destination, enter a new URL and press Update</label>
-            <input id="newLongURL" type="text" name="newLongURL" placeholder="http://" style="width: 300px">
-            <input type="submit" value="Update">
-          </form>
+      <div class="jumbotron">
+        <h1>Welcome to TinyApp</h1>
+        <p class="lead">Below are the details of your request!</p>
       </div>
+
+    <div class="container">
+      <h4>The shortened URL is:<b>localhost:8080/u/<%= urls[shortURL].shortURL %></b></h4>
+      <h4>The <i><b>destination</b></i> URL is:<b><%= urls[shortURL].longURL %></b></h4>
+      <form action="/urls/<%= urls[shortURL].shortURL %>/modify" method="POST">
+      <label for="newLongURL">To change the destination, enter a new URL and press Update</label>
+      <input id="newLongURL" type="text" name="newLongURL" placeholder="http://" style="width: 300px">
+      <input type="submit" value="Update">
+      </form>
+    </div>
   </body>
 <%- include('partials/_footer') %>
 </html>

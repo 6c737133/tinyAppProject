@@ -3,7 +3,6 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 const hashed_password = bcrypt.hashSync("s34nQ", 10);
 const cookieSession = require("cookie-session");
@@ -11,7 +10,6 @@ const cookieSession = require("cookie-session");
 // define the template rendering engine and any further express extensions
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(cookieParser());
 app.use(express.static('public'));
 app.use(cookieSession({
   name: 'session',
@@ -144,16 +142,7 @@ if (!req.session.user_id) {
   urlDatabase[shortURL].shortURL = shortURL
   urlDatabase[shortURL].longURL = longURL
 
-  // let templateVars = {
-  //   urls: urlDatabase,
-  //   userCookie: req.session.user_id,
-  //   shortURL: shortURL,
-  //   longURL: longURL
-  // };
-
   res.redirect("/urls")
-  //return res.render("urls_show", templateVars)
-  //res.redirect(`http://localhost:8080/urls/${shortURL}`)
 }});
 
 // insert functionality to delete a key/value pair

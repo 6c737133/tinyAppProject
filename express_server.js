@@ -70,15 +70,13 @@ app.get("/urls", (req, res) => {
 // evidently /urls/:id is syntactically indifferent from /urls/new,
 // so if you want the latter to function, it has to appear BEFORE the former within the code
 app.get("/urls/new", (req, res) => {
-  if (req.cookies.user_id === undefined) {
-    return res.redirect("/login")
-  } else {
-    let templateVars = {
-      user: userDatabase,
-      userCookie: req.cookies.user_id
-    };
-    return res.render("urls_new", templateVars);
-  }
+  if (!req.cookies.user_id) return res.redirect("/login")
+
+  let templateVars = {
+    user: userDatabase,
+    userCookie: req.cookies.user_id
+  };
+  return res.render("urls_new", templateVars);
 });
 
 // route for a specific short URL's info
@@ -98,8 +96,7 @@ app.get("/urls/:id", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  let longURL = urlDatabase[req.params.shortURL];
-  return res.redirect(longURL);
+  return res.redirect(urlDatabase[req.params.shortURL].longURL);
 });
 
 // create new end point to support registration

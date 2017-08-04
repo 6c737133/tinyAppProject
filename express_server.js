@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(express.static('public'));
 app.use(cookieSession({
   name: 'session',
-  keys: [s34nQu1ltY]
+  keys: ['s34nQu1ltY']
 }));
 
 // define the URL database which would eventually be replaced by actual DB
@@ -47,7 +47,7 @@ var userDatabase = {};
 
 app.get("/urls", (req, res) => {
   let userUrls = [];
-  if (req.session.user_id === undefined) {
+  if (!req.session.user_id) {
     return res.redirect("/login")
   } else {
       for (key in urlDatabase) {
@@ -136,7 +136,7 @@ app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
 
-if (req.session.user_id === undefined) {
+if (!req.session.user_id) {
     return res.redirect("/login")
   } else {
   urlDatabase[shortURL] = [shortURL]
@@ -144,14 +144,15 @@ if (req.session.user_id === undefined) {
   urlDatabase[shortURL].shortURL = shortURL
   urlDatabase[shortURL].longURL = longURL
 
-  let templateVars = {
-    urls: urlDatabase,
-    userCookie: req.session.user_id,
-    shortURL: shortURL,
-    longURL: longURL
-  };
+  // let templateVars = {
+  //   urls: urlDatabase,
+  //   userCookie: req.session.user_id,
+  //   shortURL: shortURL,
+  //   longURL: longURL
+  // };
 
-  return res.render("urls_show", templateVars)
+  res.redirect("/urls")
+  //return res.render("urls_show", templateVars)
   //res.redirect(`http://localhost:8080/urls/${shortURL}`)
 }});
 
@@ -170,10 +171,10 @@ app.post("/urls/:id/delete", (req, res) => {
 
 // insert functionality to modify a key/value pair (change desintation URL)
 app.post("/urls/:id/modify", (req, res) => {
-  if (req.session.user_id === undefined) {
+  if (!req.session.user_id) {
     return res.status(403).send('You are not authorized to access this resource.')
   } else {
-      urlDatabase[req.params.id].shortURL.longURL = req.body.newLongURL;
+      urlDatabase[req.params.id].longURL = req.body.newLongURL;
     }
 
   let userUrls = [];
@@ -197,7 +198,8 @@ app.post("/login", (req, res) => {
 
   for (user in userDatabase) {
     if ((req.body.email === userDatabase[user].email) && (bcrypt.compareSync(req.body.password, userDatabase[user].password))) {
-      return res.cookie("user_id", userDatabase[user].id).redirect("/urls");
+      req.session.user_id = userDatabase[user].id
+      return res.redirect("/urls");
     }
   };
   return res.status(403).send('The email address or password provided are invalid.');
@@ -205,7 +207,8 @@ app.post("/login", (req, res) => {
 
 // insert logout functionality - need to clear the cookie and redirect
 app.post("/logout", (req, res) => {
-  return res.clearCookie("user_id").redirect("/login");
+  req.session = null
+  return res.redirect("/login");
 });
 
 // insert registration functionality and error handling
@@ -226,7 +229,7 @@ app.post("/register", (req, res) => {
     email: req.body.email,
     password: password
   };
-  console.log(password)
+  req.session.user_id = newUserID
   return res.cookie("user_id", newUserID).redirect("/urls");
 });
 
@@ -237,7 +240,7 @@ app.use("/", (req, res) => {
 
 // initialize the server and provide a console log to that effect
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`TinyApp is currently running, available at localhost:${PORT}!`);
 });
 
 

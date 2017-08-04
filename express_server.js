@@ -56,7 +56,6 @@ app.get("/urls", (req, res) => {
       for (key in urlDatabase) {
         if (req.cookies.user_id === urlDatabase[key].user) {
           userUrls.push(urlDatabase[key])
-          console.log(userUrls)
        }
      }
   let templateVars = {
@@ -83,22 +82,22 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
-    let templateVars = {
-    urls: urlDatabase,
-    shortURL: req.params.id,
-    longURL: urlDatabase[req.params.id],
-    user: userDatabase,
-    userCookie: req.cookies.user_id
-  };
-    if (req.cookies.user_id === undefined) {
+  if (req.cookies.user_id === undefined) {
     res.redirect("/login")
   } else {
-    for (urlObj in urlDatabase) {
-      if (req.cookies.user_id === urlObj) {
+      for (urlObj in urlDatabase) {
+        if (req.cookies.user_id === urlObj) {
         res.render("urls_show", templateVars)
+        }
+      }
+      let templateVars = {
+        urls: urlDatabase,
+        shortURL: req.params.id,
+        longURL: urlDatabase[req.params.id],
+        user: userDatabase,
+        userCookie: req.cookies.user_id
       }
     }
-  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
@@ -124,22 +123,30 @@ app.get("/login", (req, res) => {
   res.render("urls_login", templateVars)
 })
 
-// test wildcard route
-// app.get("/:anything", (req, res) => {
-//   res.redirect("/login");
-// })
-
 // first instance of something other than .GET
 // this section will bring functionality to the form submissions
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL;
+
+if (req.cookies.user_id === undefined) {
+    res.redirect("/login")
+  } else {
+  urlDatabase[shortURL] = [shortURL]
+  urlDatabase[shortURL].user = req.cookies.user_id
+  urlDatabase[shortURL].shortURL = shortURL
+  urlDatabase[shortURL].longURL = longURL
+
   let templateVars = {
-    user: userDatabase
+    urls: urlDatabase,
+    userCookie: req.cookies.user_id,
+    shortURL: shortURL,
+    longURL: longURL
   };
-  urlDatabase[shortURL] = longURL;
-  res.redirect(`http://localhost:8080/urls/${shortURL}`)
-});
+
+  res.render("urls_show", templateVars)
+  //res.redirect(`http://localhost:8080/urls/${shortURL}`)
+}});
 
 // insert functionality to delete a key/value pair
 app.post("/urls/:id/delete", (req, res) => {
@@ -170,19 +177,21 @@ app.post("/urls/:id/modify", (req, res) => {
 
 // insert login functionality - modified to accept real credentials
 app.post("/login", (req, res) => {
+  if (!req.body.email) return res.status(403).send('Invalid email or password');
+  if (!req.body.password) return res.status(403).send('Invalid email or password');
+
   for (user in userDatabase) {
     if (req.body.email !== userDatabase[user].email) {
       return res.status(403).send('Invalid email or password');
     } else {
-      if (req.body.password !== userDatabase[user].password) {
-        return res.status(403).send('Invalid email or password');
-      } else {
-        res.cookie("user_id", userDatabase[user].id);
-        res.redirect("/urls");
-        }
+        if (req.body.password === userDatabase[user].password) {
+            res.cookie("user_id", userDatabase[user].id).redirect("/urls");
+        } else {
+          return res.status(403).send('Invalid email or password');
+          }
       }
-    };
-  });
+  };
+});
 
 // insert logout functionality - need to clear the cookie and redirect
 app.post("/logout", (req, res) => {

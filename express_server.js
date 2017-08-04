@@ -35,18 +35,18 @@ var urlDatabase = {
 
 
 // create a user object to facilitate registration/logic
-var userDatabase = {
-  "fakeUser1" : {
-    id: "fakeUser1",
-    email: "fakeUser1@email.com",
-    password: "1"
-  },
-  "fakeUser2" : {
-    id: "fakeUser2",
-    email: "fakeUser2@email.com",
-    password: "2"
-  }
-};
+var userDatabase = {};
+  // "fakeUser1" : {
+  //   id: "fakeUser1",
+  //   email: "fakeUser1@email.com",
+  //   password: "1"
+  // },
+  // "fakeUser2" : {
+  //   id: "fakeUser2",
+  //   email: "fakeUser2@email.com",
+  //   password: "2"
+  // }
+
 
 // define the various routes required
 // should later refactor this code & place in it's own module

@@ -14,28 +14,26 @@
         <div class="jumbotron">
           <h1>Welcome to TinyApp</h1>
           <p class="lead">Please fill out the below details to create your account!</p>
+        </div>
     </div>
-    </div>
 
-
-      <div class="container">
-
-<table>
-<tr>
-<td id="noBorder">
+    <div class="container">
+      <table>
+        <tr>
+          <td id="noBorder">
             <form action="/register" method="POST">
             <label for="email">Email address:</label>
             <input id="email" type="email" name="email" placeholder="email@domain.com" style="width: 200px">
-</td>
-            <td id="noBorder">
+          </td>
+          <td id="noBorder">
             <label for="password">Create a password: </label>
             <input id="password" type="password" name="password" style="width: 100">
             <input type="submit" value="Submit">
             </form>
-</td>
-</tr>
-</table>
-      </div>
+          </td>
+        </tr>
+      </table>
+    </div>
   </body>
 <%- include('partials/_footer') %>
 </html>

@@ -51,7 +51,7 @@ var userDatabase = {
 app.get("/urls", (req, res) => {
   let userUrls = [];
   if (req.cookies.user_id === undefined) {
-    res.redirect("/login")
+    return res.redirect("/login")
   } else {
       for (key in urlDatabase) {
         if (req.cookies.user_id === urlDatabase[key].user) {
@@ -62,7 +62,7 @@ app.get("/urls", (req, res) => {
       currUrls: userUrls,
       userCookie: req.cookies.user_id
   }
-    res.render("urls_index", templateVars)
+    return res.render("urls_index", templateVars)
    }
 });
 
@@ -71,38 +71,35 @@ app.get("/urls", (req, res) => {
 // so if you want the latter to function, it has to appear BEFORE the former within the code
 app.get("/urls/new", (req, res) => {
   if (req.cookies.user_id === undefined) {
-    res.redirect("/login")
+    return res.redirect("/login")
   } else {
     let templateVars = {
       user: userDatabase,
       userCookie: req.cookies.user_id
     };
-    res.render("urls_new", templateVars);
+    return res.render("urls_new", templateVars);
   }
 });
 
+// route for a specific short URL's info
 app.get("/urls/:id", (req, res) => {
   if (req.cookies.user_id === undefined) {
-    res.redirect("/login")
+    return res.status(403).send('You are not authorized to access this resource.')
   } else {
-      for (urlObj in urlDatabase) {
-        if (req.cookies.user_id === urlObj) {
-        res.render("urls_show", templateVars)
+        let templateVars = {
+          urls: urlDatabase,
+          shortURL: req.params.id,
+          longURL: urlDatabase[req.params.id],
+          user: userDatabase,
+          userCookie: req.cookies.user_id
         }
-      }
-      let templateVars = {
-        urls: urlDatabase,
-        shortURL: req.params.id,
-        longURL: urlDatabase[req.params.id],
-        user: userDatabase,
-        userCookie: req.cookies.user_id
-      }
+      return res.render("urls_show", templateVars)
     }
 });
 
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
-  res.redirect(longURL);
+  return res.redirect(longURL);
 });
 
 // create new end point to support registration
@@ -111,17 +108,33 @@ app.get("/register", (req, res) => {
     user: userDatabase,
     userCookie: req.cookies.user_id
   };
-  res.render("urls_register", templateVars);
+  return res.render("urls_register", templateVars);
 });
 
 // create a login page to transfer responsibility from header to proper page
 app.get("/login", (req, res) => {
-  let templateVars = {
-    user: userDatabase,
-    userCookie: req.cookies.user_id
-  };
-  res.render("urls_login", templateVars)
-})
+  if (!req.cookies.user_id) {
+    let templateVars = {
+      user: userDatabase,
+      userCookie: req.cookies.user_id
+    }
+    return res.render("urls_login", templateVars)
+  } else {
+      let userUrls = [];
+        for (key in urlDatabase) {
+          if (req.cookies.user_id === urlDatabase[key].user) {
+            userUrls.push(urlDatabase[key])
+          }
+        }
+
+    let templateVars = {
+      currUrls: userUrls,
+      user: userDatabase,
+      userCookie: req.cookies.user_id
+    };
+    return res.redirect("/urls")
+  }
+});
 
 // first instance of something other than .GET
 // this section will bring functionality to the form submissions
@@ -130,7 +143,7 @@ app.post("/urls", (req, res) => {
   let longURL = req.body.longURL;
 
 if (req.cookies.user_id === undefined) {
-    res.redirect("/login")
+    return res.redirect("/login")
   } else {
   urlDatabase[shortURL] = [shortURL]
   urlDatabase[shortURL].user = req.cookies.user_id
@@ -144,7 +157,7 @@ if (req.cookies.user_id === undefined) {
     longURL: longURL
   };
 
-  res.render("urls_show", templateVars)
+  return res.render("urls_show", templateVars)
   //res.redirect(`http://localhost:8080/urls/${shortURL}`)
 }});
 
@@ -158,70 +171,72 @@ app.post("/urls/:id/delete", (req, res) => {
     user: userDatabase
   };
   delete currentDB[req.params.id];
-  res.redirect("/urls");
+  return res.redirect("/urls");
 });
 
 // insert functionality to modify a key/value pair (change desintation URL)
 app.post("/urls/:id/modify", (req, res) => {
-  let currentDB = urlDatabase;
-  let userID = req.cookies.user_id;
-  let newLongURL = req.body.newLongURL;
+  if (req.cookies.user_id === undefined) {
+    return res.status(403).send('You are not authorized to access this resource.')
+  } else {
+      urlDatabase[req.params.id].shortURL.longURL = req.body.newLongURL;
+    }
 
-  currentDB[userID].longURL = newLongURL;
+  let userUrls = [];
+    for (key in urlDatabase) {
+      if (req.cookies.user_id === urlDatabase[key].user) {
+        userUrls.push(urlDatabase[key])
+      }
+    }
 
-  let templateVars = {
-    user: userDatabase
-  };
-  res.redirect("/urls");
+    let templateVars = {
+      user: userDatabase,
+      currUrls: userUrls,
+      userCookie: req.cookies.user_id
+    };
+  return res.render("urls_index", templateVars);
 });
 
 // insert login functionality - modified to accept real credentials
 app.post("/login", (req, res) => {
-  if (!req.body.email) return res.status(403).send('Invalid email or password');
-  if (!req.body.password) return res.status(403).send('Invalid email or password');
+  if (!req.body.email || !req.body.password) return res.status(403).send('Invalid email or password');
 
   for (user in userDatabase) {
-    if (req.body.email !== userDatabase[user].email) {
-      return res.status(403).send('Invalid email or password');
-    } else {
-        if (req.body.password === userDatabase[user].password) {
-            res.cookie("user_id", userDatabase[user].id).redirect("/urls");
-        } else {
-          return res.status(403).send('Invalid email or password');
-          }
-      }
+    if ((req.body.email === userDatabase[user].email) && (req.body.password === userDatabase[user].password)) {
+      return res.cookie("user_id", userDatabase[user].id).redirect("/urls");
+    }
   };
+  return res.status(403).send('Invalid email or password');
 });
 
 // insert logout functionality - need to clear the cookie and redirect
 app.post("/logout", (req, res) => {
-  res.clearCookie("user_id");
-  res.redirect("/urls");
+  return res.clearCookie("user_id").redirect("/login");
 });
 
 // insert registration functionality and error handling
 app.post("/register", (req, res) => {
-  if (req.body.email === '' || req.body.password === '') {
-    return res.status(400);
-  } else {
-        for (user in userDatabase) {
-          if (req.body.email == userDatabase[user].email) {
-            return res.status(400);
-          }
-        }
-      let newUserID = generateRandomString();
-      userDatabase[newUserID] = {
-        id: newUserID,
-        email: req.body.email,
-        password: req.body.password
-      };
-      res.cookie("user_id", newUserID);
-      res.redirect("/urls");
-    };
-  });
+  if (!req.body.email || !req.body.password) return res.status(400).send('You must provide an email and password');
+
+  for (user in userDatabase) {
+    if (req.body.email === userDatabase[user].email) {
+      return res.status(400).send('That email address is already registered.');
+    }
+  }
+
+  let newUserID = generateRandomString();
+
+  userDatabase[newUserID] = {
+    id: newUserID,
+    email: req.body.email,
+    password: req.body.password
+  };
+  return res.cookie("user_id", newUserID).redirect("/urls");
+});
+
 
 app.use("/", (req, res) => {
-  res.redirect("/login");
+  return res.redirect("/login");
 });
 
 // initialize the server and provide a console log to that effect

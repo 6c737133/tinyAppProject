@@ -5,14 +5,18 @@ const PORT = process.env.PORT || 8080;
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
-//const password = req.body.password;
 const hashed_password = bcrypt.hashSync("s34nQ", 10);
+const cookieSession = require("cookie-session");
 
 // define the template rendering engine and any further express extensions
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static('public'));
+app.use(cookieSession({
+  name: 'session',
+  keys: [s34nQu1ltY]
+}));
 
 // define the URL database which would eventually be replaced by actual DB
 var urlDatabase = {

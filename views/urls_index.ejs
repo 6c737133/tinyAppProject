@@ -14,7 +14,7 @@
     <div class="container">
         <div class="jumbotron">
           <h1>Welcome to TinyApp</h1>
-          <p class="lead">Below are all of the shortened URLs available!</p>
+          <p class="lead"><b>Below are all of the shortened URLs that you have created!</b></p>
     </div>
 
 
@@ -28,10 +28,14 @@
         </tr>
         <% for (let urlObj in currUrls) { %>
           <tr>
-            <td><%= currUrls[urlObj].shortURL %></td>
+            <td>http://localhost:8080/u/<%= currUrls[urlObj].shortURL %></td>
             <td><b>===></b></td>
             <td><%= currUrls[urlObj].longURL %></td>
-            <td><a href="/urls/<%= currUrls[urlObj].shortURL %>">Modify</a>
+            <td>
+            <form method="GET" action="/urls/<%= currUrls[urlObj].shortURL %>">
+            <input type="submit" value="Modify">
+            </form>
+            </td>
             <td>
             <form method="POST" action="/urls/<%= currUrls[urlObj].shortURL %>/delete">
             <input type="submit" value="Delete">

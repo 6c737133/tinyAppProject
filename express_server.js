@@ -35,7 +35,8 @@ app.get("/urls", (req, res) => {
      }
   let templateVars = {
       currUrls: userUrls,
-      userCookie: req.session.user_id
+      userCookie: req.session.user_id,
+      user: userDatabase
   }
     return res.render("urls_index", templateVars);
    }
@@ -55,23 +56,28 @@ app.get("/urls/new", (req, res) => {
 
 // route for a specific short URL's info
 app.get("/urls/:id", (req, res) => {
-  if (!req.session.user_id) {
+  if (req.session.user_id !== urlDatabase[req.params.id].user) {
     return res.status(403).send("You are not authorized to access this resource.")
-  } else {
-        let templateVars = {
-          urls: urlDatabase,
-          shortURL: req.params.id,
-          longURL: urlDatabase[req.params.id],
-          user: userDatabase,
-          userCookie: req.session.user_id
-        }
-      return res.render("urls_show", templateVars);
-    }
+    console.log(req.session.user_id)
+    console.log("error1")
+  };
+  let templateVars = {
+    urls: urlDatabase,
+    shortURL: req.params.id,
+    longURL: urlDatabase[req.params.id],
+    user: userDatabase,
+    userCookie: req.session.user_id
+  }
+  return res.render("urls_show", templateVars);
 });
 
 // simple route to ensure the short URL routes to the long URL for anyone that attempts to GET it
 app.get("/u/:shortURL", (req, res) => {
-  return res.redirect(urlDatabase[req.params.shortURL].longURL);
+  if (!urlDatabase[req.params.shortURL]) {
+    return res.status(404).send('Sorry, this short URL does not have a destination URL defined.')
+  } else {
+      return res.redirect(urlDatabase[req.params.shortURL].longURL);
+    }
 });
 
 // create new end point to support registration
@@ -133,7 +139,7 @@ app.post("/urls/:id/delete", (req, res) => {
   let templateVars = {
     user: userDatabase
   };
-  delete currentDB[req.params.id];
+  delete currentDB[entryToDelete];
   return res.redirect("/urls");
 });
 
@@ -144,18 +150,7 @@ app.post("/urls/:id/modify", (req, res) => {
   } else {
       urlDatabase[req.params.id].longURL = req.body.newLongURL;
     }
-  let userUrls = [];
-    for (key in urlDatabase) {
-      if (req.session.user_id === urlDatabase[key].user) {
-        userUrls.push(urlDatabase[key]);
-      }
-    }
-    let templateVars = {
-      user: userDatabase,
-      currUrls: userUrls,
-      userCookie: req.session.user_id
-    };
-  return res.render("urls_index", templateVars);
+  return res.redirect("/urls");
 });
 
 // insert login functionality
@@ -166,7 +161,8 @@ app.post("/login", (req, res) => {
 
   for (user in userDatabase) {
     if ((req.body.email === userDatabase[user].email) && (bcrypt.compareSync(req.body.password, userDatabase[user].password))) {
-      req.session.user_id = userDatabase[user].id
+      req.session.user_id = userDatabase[user].email
+      req.session.user_email = userDatabase[user].email
       return res.redirect("/urls");
     }
   };
@@ -200,7 +196,8 @@ app.post("/register", (req, res) => {
                               password: password
                             };
 
-  req.session.user_id = newUserID
+  req.session.user_id = req.body.email
+  req.session.user_email = req.body.email
   return res.cookie("user_id", newUserID).redirect("/urls");
 });
 
